@@ -12,7 +12,8 @@ with tripdata as
   where vendorid is not null 
 )
 select
-   -- identifiers
+    rn,
+    -- identifiers
     {{ dbt_utils.generate_surrogate_key(['vendorid', 'tpep_pickup_datetime']) }} as tripid,    
     {{ dbt.safe_cast("vendorid", api.Column.translate_type("integer")) }} as vendorid,
     {{ dbt.safe_cast("ratecodeid", api.Column.translate_type("integer")) }} as ratecodeid,
@@ -45,8 +46,8 @@ from tripdata
 where rn = 1
 
 -- dbt build --select <model.sql> --vars '{'is_test_run: false}'
--- {% if var('is_test_run', default=true) %}
+{% if var('is_test_run', default=true) %}
 
---   limit 100
+  limit 100
 
--- {% endif %}
+{% endif %}
